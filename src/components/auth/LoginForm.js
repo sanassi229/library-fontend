@@ -138,7 +138,7 @@ return (
        </div>
 
        {errors.submit && (
-         <div className="bg-red-50 border border-red-200 rounded-lg p-3 ">
+         <div className="bg-red-50 border border-red-200 rounded-lg p-3 mr-10 ml-10">
            <p className="text-red-600 text-sm">{errors.submit}</p>
          </div>
        )}

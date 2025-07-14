@@ -46,39 +46,47 @@ api.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response;
       
+      const originalMessage = data?.message;
+      
       switch (status) {
         case 401:
-          localStorage.removeItem(STORAGE_KEYS.TOKEN);
-          localStorage.removeItem(STORAGE_KEYS.USER);
+          const isLoginEndpoint = error.config?.url?.includes('/auth/login');
           
-          if (window.location.pathname !== '/login') {
-            window.location.href = '/login';
+          if (!isLoginEndpoint) {
+            localStorage.removeItem(STORAGE_KEYS.TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.USER);
+            
+            if (window.location.pathname !== '/login') {
+              window.location.href = '/login';
+            }
+            
+            error.message = ERROR_MESSAGES.UNAUTHORIZED;
+          } else {
+            error.message = originalMessage || ERROR_MESSAGES.UNAUTHORIZED;
           }
-          
-          error.message = ERROR_MESSAGES.UNAUTHORIZED;
           break;
           
         case 403:
-          error.message = ERROR_MESSAGES.FORBIDDEN;
+          error.message = originalMessage || ERROR_MESSAGES.FORBIDDEN;
           break;
           
         case 404:
-          error.message = ERROR_MESSAGES.NOT_FOUND;
+          error.message = originalMessage || ERROR_MESSAGES.NOT_FOUND;
           break;
           
         case 422:
-          error.message = data?.message || ERROR_MESSAGES.VALIDATION_ERROR;
+          error.message = originalMessage || ERROR_MESSAGES.VALIDATION_ERROR;
           break;
           
         case 500:
         case 502:
         case 503:
         case 504:
-          error.message = ERROR_MESSAGES.SERVER_ERROR;
+          error.message = originalMessage || ERROR_MESSAGES.SERVER_ERROR;
           break;
           
         default:
-          error.message = data?.message || `HTTP Error ${status}`;
+          error.message = originalMessage || `HTTP Error ${status}`;
       }
     } else if (error.request) {
       error.message = ERROR_MESSAGES.NETWORK_ERROR;

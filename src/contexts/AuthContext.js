@@ -21,8 +21,49 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
 
+  const handleApiResponse = (response, successMessage = null) => {
+    if (response.success) {
+      return {
+        success: true,
+        message: response.message || successMessage,
+        data: response.data
+      };
+    } else {
+      return {
+        success: false,
+        message: response.message || 'Có lỗi xảy ra'
+      };
+    }
+  };
+
+  const handleApiError = (error) => {
+    console.error('API Error:', error);
+    
+    const errorMessage = error.response?.data?.message || 
+                        error.message || 
+                        error.error || 
+                        ERROR_MESSAGES.NETWORK_ERROR;
+    
+    return {
+      success: false,
+      message: errorMessage
+    };
+  };
+
+  const saveUserData = (userData, token) => {
+    localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
+    setUser(userData);
+  };
+
+  const clearAuthData = () => {
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.USER);
+    setUser(null);
+  };
+
   useEffect(() => {
-    const initializeAuth = () => {
+    const initializeAuth = async () => {
       try {
         const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
         const userData = localStorage.getItem(STORAGE_KEYS.USER);
@@ -31,7 +72,7 @@ export const AuthProvider = ({ children }) => {
           const parsedUser = JSON.parse(userData);
           setUser(parsedUser);
           
-          verifyToken();
+          await verifyToken();
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -42,156 +83,150 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeAuth();
-  }, []); 
+  }, []);
 
   const verifyToken = async () => {
     try {
       const response = await apiMethods.get('/auth/me');
-      if (response.success) {
+      
+      if (response.success && response.data) {
         setUser(response.data);
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.data));
+        return { success: true, data: response.data };
       } else {
         clearAuthData();
+        return { success: false, message: 'Token không hợp lệ' };
       }
     } catch (error) {
       console.error('Token verification failed:', error);
       clearAuthData();
+      return handleApiError(error);
     }
   };
 
-  const clearAuthData = () => {
-    localStorage.removeItem(STORAGE_KEYS.TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.USER);
-    setUser(null);
-  };
-
-const login = async (email, password) => {
-  setAuthLoading(true);
-  
-  try {
-    const response = await apiMethods.post('/auth/login', { 
-      email: email.trim().toLowerCase(), 
-      password 
-    });
-    
-    // Debug: Log response từ API
-    console.log('Raw API response:', response);
-    console.log('response.success:', response.success);
-    console.log('response.message:', response.message);
-    console.log('response.data:', response.data);
-    
-    if (response.success) {
-      const { user: userData, token } = response.data;
-      
-      localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
-      setUser(userData);
-      
-      return { 
-        success: true, 
-        message: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-        user: userData
-      };
-    } else {
-      console.log('Login failed, returning error message:', response.message);
-      return { 
-        success: false, 
-        message: response.message || ERROR_MESSAGES.LOGIN_REQUIRED 
+  const login = async (email, password) => {
+    if (!email || !password) {
+      return {
+        success: false,
+        message: 'Vui lòng nhập đầy đủ email và mật khẩu'
       };
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    console.log('Error details:', error.error);
-    return { 
-      success: false, 
-      message: error.error || ERROR_MESSAGES.NETWORK_ERROR 
-    };
-  } finally {
-    setAuthLoading(false);
-  }
-};
-  const registerCard = async(userData) => {
-    setAuthLoading(true);
-    try{
-        const {name, email, phone, address, cccd} = userData
-        console.log("Registering library card:", userData);
 
-        const response = await apiMethods.post("/auth/register-library-card", {
-           name: name.trim(),
-        email: email.trim().toLowerCase(), 
-        phone: phone.trim(),
-        address: address.trim(),
-        cccd: cccd.trim()
-        });
-          if (response.success) {
-        const { user: newUser, token, cardId } = response.data;
-        
-        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
-        setUser(newUser);
-        
-        return { 
-          success: true, 
-          message: response.message || SUCCESS_MESSAGES.REGISTER_SUCCESS,
-          user: newUser,
-          cardId
-        };
-      } else {
-        return { 
-          success: false, 
-          error: response.message || 'Registration failed' 
-        };
-      }
-    }catch (error) {
-      console.error('Register error:', error);
-      return { 
-        success: false, 
-        error: error.error || ERROR_MESSAGES.NETWORK_ERROR 
-      };
-    } finally {
-      setAuthLoading(false);
-    }
-  }
-
-  const register = async (userData) => {
     setAuthLoading(true);
     
     try {
-      const { name, email, password, address } = userData;
+      const response = await apiMethods.post('/auth/login', { 
+        email: email.trim().toLowerCase(), 
+        password 
+      });
       
+      const result = handleApiResponse(response, SUCCESS_MESSAGES.LOGIN_SUCCESS);
+      
+      if (result.success && result.data) {
+        const { user: userData, token } = result.data;
+        saveUserData(userData, token);
+        
+        return {
+          success: true,
+          message: result.message,
+          user: userData
+        };
+      }
+      
+      return result;
+      
+    } catch (error) {
+      return handleApiError(error);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const register = async (userData) => {
+    const { name, email, password, address } = userData;
+    
+    if (!name || !email || !password || !address) {
+      return {
+        success: false,
+        message: 'Vui lòng điền đầy đủ thông tin'
+      };
+    }
+
+    setAuthLoading(true);
+    
+    try {
       const response = await apiMethods.post('/auth/register', { 
         name: name.trim(),
         email: email.trim().toLowerCase(), 
         password,
-        address: address.trim(),
-      
+        address: address.trim()
       });
       
-      if (response.success) {
-        const { user: newUser, token, cardId } = response.data;
+      const result = handleApiResponse(response, SUCCESS_MESSAGES.REGISTER_SUCCESS);
+      
+      if (result.success && result.data) {
+        const { user: newUser, token, cardId } = result.data;
+        saveUserData(newUser, token);
         
-        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
-        setUser(newUser);
-        
-        return { 
-          success: true, 
-          message: response.message || SUCCESS_MESSAGES.REGISTER_SUCCESS,
+        return {
+          success: true,
+          message: result.message,
           user: newUser,
           cardId
         };
-      } else {
-        return { 
-          success: false, 
-          error: response.message || 'Registration failed' 
+      }
+      
+      return result;
+      
+    } catch (error) {
+      return handleApiError(error);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const registerCard = async (userData) => {
+    const { name, email, phone, address, cccd } = userData;
+    
+    if (!name || !email || !phone || !address || !cccd) {
+      return {
+        success: false,
+        message: 'Vui lòng điền đầy đủ thông tin'
+      };
+    }
+
+    setAuthLoading(true);
+    
+    try {
+      const response = await apiMethods.post('/auth/register-library-card', {
+        name: name.trim(),
+        email: email.trim().toLowerCase(), 
+        phone: phone.trim(),
+        address: address.trim(),
+        cccd: cccd.trim()
+      });
+      
+      const result = handleApiResponse(response, 'Đăng ký thẻ thư viện thành công');
+      
+      if (result.success && result.data) {
+        const { user: newUser, token, cardId } = result.data;
+        
+        if (token && newUser) {
+          saveUserData(newUser, token);
+        }
+        
+        return {
+          success: true,
+          message: result.message,
+          user: newUser,
+          cardId
         };
       }
+      
+      return result;
+      
     } catch (error) {
-      console.error('Register error:', error);
-      return { 
-        success: false, 
-        error: error.error || ERROR_MESSAGES.NETWORK_ERROR 
-      };
+      return handleApiError(error);
     } finally {
       setAuthLoading(false);
     }
@@ -199,7 +234,7 @@ const login = async (email, password) => {
 
   const logout = () => {
     clearAuthData();
-  
+    
     return { 
       success: true, 
       message: SUCCESS_MESSAGES.LOGOUT_SUCCESS 
@@ -207,26 +242,39 @@ const login = async (email, password) => {
   };
 
   const updateUser = (userData) => {
+    if (!userData) return;
+    
     const updatedUser = { ...user, ...userData };
     setUser(updatedUser);
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
+    
+    return {
+      success: true,
+      message: 'Cập nhật thông tin thành công',
+      user: updatedUser
+    };
   };
 
   const refreshAuth = async () => {
     try {
       const response = await apiMethods.get('/auth/me');
-      if (response.success) {
-        setUser(response.data);
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.data));
-        return { success: true, user: response.data };
+      const result = handleApiResponse(response);
+      
+      if (result.success && result.data) {
+        setUser(result.data);
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(result.data));
+        
+        return { 
+          success: true, 
+          user: result.data 
+        };
       } else {
         clearAuthData();
-        return { success: false, error: 'Failed to refresh auth' };
+        return result;
       }
     } catch (error) {
-      console.error('Refresh auth error:', error);
       clearAuthData();
-      return { success: false, error: error.error };
+      return handleApiError(error);
     }
   };
 
@@ -245,20 +293,20 @@ const login = async (email, password) => {
     isAuthenticated,
     
     login,
-    registerCard,
     register,
+    registerCard,
     logout,
     updateUser,
     refreshAuth,
+    verifyToken,
+    clearAuthData,
     
     isAdmin,
     isLibrarian,
     isMember,
     canManageBooks,
     canManageUsers,
-    hasLibraryCard,
-    
-    clearAuthData
+    hasLibraryCard
   };
 
   return (
