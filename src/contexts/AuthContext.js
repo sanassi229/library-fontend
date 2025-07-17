@@ -198,7 +198,7 @@ export const AuthProvider = ({ children }) => {
     setAuthLoading(true);
     
     try {
-      const response = await apiMethods.post('/auth/register-library-card', {
+      const response = await apiMethods.post('/auth/register-card-only', {
         name: name.trim(),
         email: email.trim().toLowerCase(), 
         phone: phone.trim(),

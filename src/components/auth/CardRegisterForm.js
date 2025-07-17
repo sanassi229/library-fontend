@@ -208,54 +208,6 @@ const CardRegisterForm = ({ onSuccess, onSwitchToLogin }) => {
           {errors.cccd && <p className="mt-1 text-sm text-red-500">{errors.cccd}</p>}
         </div>
 
-       <div className='mr-10 ml-10'>
-          <label className="block text-sm font-medium text-gray-700 mb-4">
-            Ảnh chụp hình thẻ * <span className="text-sm text-gray-500">2 hình trước - sau CCCD</span>
-          </label>
-          
-          <div className="grid grid-cols-3 gap-4">
-            <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-blue-400">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                className="hidden"
-                id="avatar-upload"
-              />
-              <label htmlFor="avatar-upload" className="cursor-pointer text-center">
-                <div className="text-2xl text-gray-400 mb-1">📷</div>
-                <div className="text-xs text-gray-500">Avatar</div>
-              </label>
-            </div>
-
-            <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-blue-400">
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                id="cccd-front"
-              />
-              <label htmlFor="cccd-front" className="cursor-pointer text-center">
-                <div className="text-2xl text-gray-400 mb-1">📷</div>
-                <div className="text-xs text-gray-500">CCCD trước</div>
-              </label>
-            </div>
-
-            <div className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-blue-400">
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                id="cccd-back"
-              />
-              <label htmlFor="cccd-back" className="cursor-pointer text-center">
-                <div className="text-2xl text-gray-400 mb-1">📷</div>
-                <div className="text-xs text-gray-500">CCCD sau</div>
-              </label>
-            </div>
-          </div>
-        </div>
-
         {errors.submit && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
             <p className="text-red-600 text-sm">{errors.submit}</p>

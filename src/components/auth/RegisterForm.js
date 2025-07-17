@@ -9,8 +9,7 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
     email: '',
     password: '',
     confirmPassword: '',
-    address: '',
-  
+    cardId: '', // ← Thay địa chỉ thành mã thẻ
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -59,14 +58,14 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
       newErrors.confirmPassword = 'Mật khẩu nhập lại không khớp';
     }
 
-    if (!formData.address.trim()) {
-      newErrors.address = 'Vui lòng nhập địa chỉ';
-    } else if (formData.address.trim().length < VALIDATION.ADDRESS_MIN_LENGTH) {
-      newErrors.address = `Địa chỉ phải có ít nhất ${VALIDATION.ADDRESS_MIN_LENGTH} ký tự`;
+    // Validation cho mã thẻ (optional - chỉ validate nếu có nhập)
+    if (formData.cardId.trim()) {
+      if (formData.cardId.trim().length !== 12) {
+        newErrors.cardId = 'Mã thẻ phải có đúng 12 ký tự';
+      } else if (!/^LIB[A-Z0-9]{9}$/.test(formData.cardId.trim().toUpperCase())) {
+        newErrors.cardId = 'Mã thẻ phải có định dạng LIB + 9 ký tự/số (VD: LIB123ABC789)';
+      }
     }
-
-   
-
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -80,7 +79,16 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
     }
 
     try {
-      const result = await register(formData);
+      // Chuẩn bị data để gửi API
+      const apiData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        // Chỉ gửi cardId nếu user có nhập
+        ...(formData.cardId.trim() && { cardId: formData.cardId.trim().toUpperCase() })
+      };
+
+      const result = await register(apiData);
       
       if (result.success) {
         if (onSuccess) {
@@ -107,13 +115,14 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
   }}
 >
 
-
    <div className="p-6">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
          Đăng ký tài khoản
         </h2>
-      
+        <p className="text-gray-600 text-sm">
+          Tạo tài khoản mới để sử dụng hệ thống thư viện
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -180,9 +189,8 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
             </div>
             {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
-
-        
         </div>
+
        <div className='mr-10 ml-10'>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
               Nhập lại mật khẩu <span className="text-red-500">*</span>
@@ -200,25 +208,28 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
             />
             {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
           </div>
-       <div className='mr-10 ml-10'>
-          <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-            Địa chỉ <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            rows={2}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-              errors.address ? 'border-red-500' : 'border-gray-300'
-            }`}
-            placeholder="Nhập địa chỉ đầy đủ"
-          />
-          {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address}</p>}
-        </div>
 
-   
+       <div className='mr-10 ml-10'>
+          <label htmlFor="cardId" className="block text-sm font-medium text-gray-700 mb-1">
+            Mã thẻ thư viện <span className="text-gray-500">(Tùy chọn)</span>
+          </label>
+          <input
+            type="text"
+            id="cardId"
+            name="cardId"
+            value={formData.cardId}
+            onChange={handleChange}
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+              errors.cardId ? 'border-red-500' : 'border-gray-300'
+            }`}
+            placeholder="VD: LIB123ABC789 (để trống nếu chưa có)"
+            maxLength={12}
+          />
+          {errors.cardId && <p className="mt-1 text-sm text-red-500">{errors.cardId}</p>}
+          <p className="mt-1 text-xs text-gray-500">
+            💡 Nếu bạn đã đăng ký thẻ thư viện, nhập mã thẻ để liên kết tài khoản
+          </p>
+        </div>
 
         {errors.submit && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -255,6 +266,15 @@ const RegisterForm = ({ onSuccess, onSwitchToLogin }) => {
             >
               Đăng nhập ngay
             </button>
+          </p>
+        </div>
+
+        <div className="text-center border-t pt-4 mt-6">
+          <p className="text-sm text-gray-600">
+            Chưa có thẻ thư viện?{' '}
+            <a href="/card-register" className="text-primary-600 hover:text-primary-700 font-medium">
+              Đăng ký thẻ thư viện
+            </a>
           </p>
         </div>
       </form>
