@@ -12,7 +12,7 @@ export const bookService = {
       if (params.category) queryParams.append('category', params.category);
       if (params.author) queryParams.append('author', params.author);
       
-      const response = await api.get(`/books?${queryParams}`);
+      const response = await api.get(`/api/books?${queryParams}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -23,7 +23,7 @@ export const bookService = {
   // Get book by ID
   getBookById: async (id) => {
     try {
-      const response = await api.get(`/books/${id}`);
+      const response = await api.get(`/api/books/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching book:', error);
@@ -34,7 +34,7 @@ export const bookService = {
   // Search books
   searchBooks: async (query) => {
     try {
-      const response = await api.get(`/books/search?q=${encodeURIComponent(query)}`);
+      const response = await api.get(`/api/books/search?q=${encodeURIComponent(query)}`);
       return response.data;
     } catch (error) {
       console.error('Error searching books:', error);
@@ -45,7 +45,7 @@ export const bookService = {
   // Get book categories
   getCategories: async () => {
     try {
-      const response = await api.get('/books/categories');
+      const response = await api.get('/api/books/categories');
       return response.data;
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -56,7 +56,7 @@ export const bookService = {
   // Get popular books
   getPopularBooks: async () => {
     try {
-      const response = await api.get('/books/popular');
+      const response = await api.get('/api/books/popular');
       return response.data;
     } catch (error) {
       console.error('Error fetching popular books:', error);
@@ -67,7 +67,7 @@ export const bookService = {
   // Add new book (admin/librarian only)
   addBook: async (bookData) => {
     try {
-      const response = await api.post('/books', bookData);
+      const response = await api.post('/api/books', bookData);
       return response.data;
     } catch (error) {
       console.error('Error adding book:', error);
@@ -78,7 +78,7 @@ export const bookService = {
   // Update book (admin/librarian only)
   updateBook: async (id, bookData) => {
     try {
-      const response = await api.put(`/books/${id}`, bookData);
+      const response = await api.put(`/api/books/${id}`, bookData);
       return response.data;
     } catch (error) {
       console.error('Error updating book:', error);
@@ -89,7 +89,7 @@ export const bookService = {
   // Delete book (admin/librarian only)
   deleteBook: async (id) => {
     try {
-      const response = await api.delete(`/books/${id}`);
+      const response = await api.delete(`/api/books/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error deleting book:', error);

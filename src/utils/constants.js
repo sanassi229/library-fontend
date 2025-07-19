@@ -1,7 +1,6 @@
-// export const API_BASE_URL = 'http://localhost:2609/api';
-// export const API_BASE_URL = 'http://localhost:2609/api';
-export const API_BASE_URL = 'https://library-backend-vgxl.onrender.com/api';
-
+// export const API_BASE_URL = 'http://localhost:2609';
+export const API_BASE_URL = 'https://library-backend-vgxl.onrender.com';
+// 
 
 export const APP_NAME = 'Library Management System';
 export const APP_VERSION = '1.0.0';

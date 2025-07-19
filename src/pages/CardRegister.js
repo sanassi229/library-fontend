@@ -45,7 +45,7 @@ const CardRegister = () => {
             <div className="bg-white rounded-lg shadow-md p-8 text-center">
               <div className="text-6xl mb-4">🎉</div>
               <h2 className="text-2xl font-bold text-green-600 mb-4">
-                Đăng ký thẻ thư viện thành công!
+                Đăng ký thẻ thư viện thành công! Vui lòng kiểm tra email để nhận mã thẻ.
               </h2>
 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
@@ -61,18 +61,20 @@ const CardRegister = () => {
 
               <div className="space-y-3">
                 <button
+                  onClick={() => navigate('/register')}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                >
+                  👤 Đăng ký tài khoản ngay
+                </button>
+
+                <button
                   onClick={() => navigate('/')}
                   className="w-full bg-primary-500 hover:bg-primary-600 text-white py-3 px-4 rounded-lg font-medium transition-colors"
                 >
                   🏠 Về trang chủ
                 </button>
 
-                <button
-                  onClick={() => navigate('/browse')}
-                  className="w-full bg-secondary-100 hover:bg-secondary-200 text-secondary-700 py-3 px-4 rounded-lg font-medium transition-colors"
-                >
-                  📚 Duyệt sách ngay
-                </button>
+
               </div>
             </div>
           </div>
