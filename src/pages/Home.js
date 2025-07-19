@@ -1,27 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import { bookService } from '../services/bookService';
 import { bannerService } from '../services/bannerService.js';
+import { collectionService } from '../services/collectionService.js';
 
 const Home = () => {
   const [banners, setBanners] = useState([]);
   const [popularBooks, setPopularBooks] = useState([]);
-  const [latestBooks, setLatestBooks] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const collectionsRef = useRef(null);
+  const [bannerHeight, setBannerHeight] = useState('400px');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        const [bannersResponse, popularResponse, latestResponse, categoriesResponse] = await Promise.all([
+        const [bannersResponse, popularResponse, collectionsResponse, categoriesResponse] = await Promise.all([
           bannerService.getAllBanners(),
           bookService.getPopularBooks(),
-          bookService.getAllBooks({ limit: 6, page: 1 }),
+          collectionService.getAllCollections(),
           bookService.getCategories()
         ]);
 
@@ -33,8 +37,8 @@ const Home = () => {
           setPopularBooks(popularResponse.data);
         }
 
-        if (latestResponse.success && latestResponse.data) {
-          setLatestBooks(latestResponse.data.books || []);
+        if (collectionsResponse.success && collectionsResponse.data) {
+          setCollections(collectionsResponse.data.slice(0, 3));
         }
 
         if (categoriesResponse.success && categoriesResponse.data) {
@@ -60,6 +64,13 @@ const Home = () => {
       return () => clearInterval(timer);
     }
   }, [banners.length]);
+
+  useEffect(() => {
+    if (!loading && collectionsRef.current) {
+      const height = collectionsRef.current.offsetHeight;
+      setBannerHeight(`${height}px`);
+    }
+  }, [loading, collections]);
 
   if (loading) {
     return (
@@ -99,12 +110,11 @@ const Home = () => {
       <div className="min-h-screen bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Left: Banner */}
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 flex flex-col">
               <div className="mb-2">
                 <h2 className="text-lg font-semibold text-center text-purple-500 mb-2">Nổi bật</h2>
               </div>
-              <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-lg bg-white">
+              <div className="relative rounded-2xl overflow-hidden shadow-lg bg-white" style={{ height: bannerHeight }}>
                 {banners.length > 0 ? (
                   <>
                     <div
@@ -122,7 +132,6 @@ const Home = () => {
                           ) : (
                             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-800"></div>
                           )}
-                          <div className="absolute inset-0 bg-black/40"></div>
                           <div className="relative z-10 h-full flex items-center p-8">
                             <div className="text-white max-w-2xl">
                               <h1 className="text-3xl lg:text-4xl font-bold mb-2">
@@ -159,15 +168,17 @@ const Home = () => {
                         </div>
                       ))}
                     </div>
-                    {/* Carousel Indicators */}
                     {banners.length > 1 && (
-                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
                         {banners.map((_, index) => (
                           <button
                             key={index}
                             onClick={() => setCurrentSlide(index)}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 ${currentSlide === index ? 'bg-white' : 'bg-white/50'
-                              }`}
+                            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                              currentSlide === index
+                                ? 'bg-white'
+                                : 'bg-gray-400'
+                            }`}
                           />
                         ))}
                       </div>
@@ -189,39 +200,38 @@ const Home = () => {
                 )}
               </div>
             </div>
-            {/* Right: Sách mới */}
+
             <div className="lg:col-span-1">
               <div className="mb-2">
                 <h2 className="text-lg font-semibold text-center text-green-500 mb-2">Mới nhất</h2>
               </div>
-              <div className="space-y-4">
-                {latestBooks.length > 0 ? (
-                  latestBooks.slice(0, 4).map((book) => (
+              <div className="space-y-4" ref={collectionsRef}>
+                {collections.length > 0 ? (
+                  collections.map((collection) => (
                     <Link
-                      key={book.idbook}
-                      to={`/books/${book.idbook}`}
-                      className="flex items-center bg-white rounded-xl shadow p-2 hover:shadow-lg transition group"
+                      key={collection.idcollection}
+                      to={`/collections/${collection.idcollection}`}
+                      className="block bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition group"
                     >
-                      <div className="w-16 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
-                        {book.imagebook ? (
-                          <img
-                            src={book.imagebook}
-                            alt={book.titlebook}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="text-3xl">📖</div>
-                        )}
-                      </div>
-                      <div className="ml-3 flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-green-600 transition-colors line-clamp-2">
-                          {book.titlebook}
-                        </h4>
-                        <div className="text-xs text-gray-600 mt-1 line-clamp-2">
-                          {book.authorbook}
+                      <div className="flex items-center space-x-4">
+                        <div className="flex-shrink-0 w-30 h-24 rounded overflow-hidden bg-gray-100 flex items-center justify-center">
+                          {collection.imagecollection ? (
+                            <img
+                              src={collection.imagecollection}
+                              alt={collection.namecollection}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-gray-400 text-3xl">📚</div>)}
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
-                          Ngày {new Date().getDate()} tháng {new Date().getMonth() + 1} năm {new Date().getFullYear()}
+
+                        <div className="flex-grow">
+                          <h4 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-green-600 transition-colors line-clamp-2 mb-1">
+                            {collection.namecollection}
+                          </h4>
+                          <div className="text-xs text-gray-500">
+                            Ngày {new Date().getDate()} tháng {new Date().getMonth() + 1} năm {new Date().getFullYear()}
+                          </div>
                         </div>
                       </div>
                     </Link>
@@ -229,7 +239,7 @@ const Home = () => {
                 ) : (
                   <div className="text-center py-8 text-gray-500 bg-white rounded-xl shadow">
                     <div className="text-4xl mb-4">📚</div>
-                    <p>Đang cập nhật sách mới...</p>
+                    <p>Đang cập nhật bộ sưu tập mới...</p>
                   </div>
                 )}
               </div>

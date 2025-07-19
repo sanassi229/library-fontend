@@ -1,7 +1,6 @@
 import api from './api';
 
 export const bannerService = {
-  // Get all active banners
   getAllBanners: async () => {
     try {
       const response = await api.get('/api/banners');
@@ -12,7 +11,6 @@ export const bannerService = {
     }
   },
 
-  // Get banner by ID
   getBannerById: async (id) => {
     try {
       const response = await api.get(`/api/banners/${id}`);
@@ -23,7 +21,6 @@ export const bannerService = {
     }
   },
 
-  // Add new banner (admin/librarian only)
   addBanner: async (bannerData) => {
     try {
       const response = await api.post('/api/banners', bannerData);
@@ -34,7 +31,6 @@ export const bannerService = {
     }
   },
 
-  // Update banner (admin/librarian only)
   updateBanner: async (id, bannerData) => {
     try {
       const response = await api.put(`/api/banners/${id}`, bannerData);
@@ -45,7 +41,6 @@ export const bannerService = {
     }
   },
 
-  // Update banner status (admin/librarian only)
   updateBannerStatus: async (id, status) => {
     try {
       const response = await api.patch(`/api/banners/${id}/status`, { status });
@@ -56,7 +51,6 @@ export const bannerService = {
     }
   },
 
-  // Delete banner (admin only)
   deleteBanner: async (id) => {
     try {
       const response = await api.delete(`/api/banners/${id}`);

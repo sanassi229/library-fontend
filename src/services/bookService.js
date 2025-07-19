@@ -1,14 +1,16 @@
 import api from './api';
 
 export const bookService = {
-  // Get all books with pagination and filters
   getAllBooks: async (params = {}) => {
     try {
       const queryParams = new URLSearchParams();
       
-      if (params.page) queryParams.append('page', params.page);
+        if (params.page) queryParams.append('page', params.page);
       if (params.limit) queryParams.append('limit', params.limit);
-      if (params.search) queryParams.append('search', params.search);
+      if (params.query) queryParams.append('search', params.query); 
+      if (params.alphabet) queryParams.append('alphabet', params.alphabet); 
+      if (params.sortBy) queryParams.append('sortBy', params.sortBy); 
+      if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder); 
       if (params.category) queryParams.append('category', params.category);
       if (params.author) queryParams.append('author', params.author);
       
@@ -20,7 +22,6 @@ export const bookService = {
     }
   },
 
-  // Get book by ID
   getBookById: async (id) => {
     try {
       const response = await api.get(`/api/books/${id}`);
@@ -31,7 +32,6 @@ export const bookService = {
     }
   },
 
-  // Search books
   searchBooks: async (query) => {
     try {
       const response = await api.get(`/api/books/search?q=${encodeURIComponent(query)}`);
@@ -42,7 +42,6 @@ export const bookService = {
     }
   },
 
-  // Get book categories
   getCategories: async () => {
     try {
       const response = await api.get('/api/books/categories');
@@ -53,7 +52,6 @@ export const bookService = {
     }
   },
 
-  // Get popular books
   getPopularBooks: async () => {
     try {
       const response = await api.get('/api/books/popular');
@@ -64,7 +62,6 @@ export const bookService = {
     }
   },
 
-  // Add new book (admin/librarian only)
   addBook: async (bookData) => {
     try {
       const response = await api.post('/api/books', bookData);
@@ -75,7 +72,6 @@ export const bookService = {
     }
   },
 
-  // Update book (admin/librarian only)
   updateBook: async (id, bookData) => {
     try {
       const response = await api.put(`/api/books/${id}`, bookData);
@@ -86,7 +82,6 @@ export const bookService = {
     }
   },
 
-  // Delete book (admin/librarian only)
   deleteBook: async (id) => {
     try {
       const response = await api.delete(`/api/books/${id}`);
