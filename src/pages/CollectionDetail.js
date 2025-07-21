@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import './CollectionDetail.css';
@@ -15,10 +15,10 @@ const CollectionDetail = () => {
         genre: 'Kinh dị, Tội phạm',
         tags: 'Kinh điển, trinh thám, giật gân',
         description: '“Rồng Đỏ” là tiểu thuyết đầu tiên trong loạt truyện nổi tiếng về kẻ sát nhân hàng loạt Hannibal Lecter...',
-        imageUrls: [ 
-            '/hannibal.jpg', 
-            '/rong-do.jpg', 
-            '/su-im-lang.jpg' 
+        imageUrls: [
+            '/hannibal.jpg',
+            '/rong-do.jpg',
+            '/su-im-lang.jpg'
         ]
     };
 
@@ -43,10 +43,10 @@ const CollectionDetail = () => {
                     <div className="interest-tabs">
                         {/* SỬA LẠI: Bỏ thẻ div bị lặp */}
                         <div className="tab active">
-                            <img 
+                            <img
                                 src="/bookmark-solid.svg" // SỬA LẠI: Dùng dấu gạch chéo tới "/"
-                                alt="Đã quan tâm" 
-                                className="tab-icon" 
+                                alt="Đã quan tâm"
+                                className="tab-icon"
                             />
                             <span>Đã quan tâm</span>
                         </div>
@@ -83,10 +83,10 @@ const CollectionDetail = () => {
                         <div className="cover-container">
                             <div className="slider-wrapper">
                                 <button onClick={goToPrevious} className="slider-button prev">‹</button>
-                                <img 
-                                    src={bookData.imageUrls[currentImageIndex]} 
-                                    alt={`${bookData.title} - cover ${currentImageIndex + 1}`} 
-                                    className="book-cover-image" 
+                                <img
+                                    src={bookData.imageUrls[currentImageIndex]}
+                                    alt={`${bookData.title} - cover ${currentImageIndex + 1}`}
+                                    className="book-cover-image"
                                 />
                                 <button onClick={goToNext} className="slider-button next">›</button>
                             </div>

@@ -28,52 +28,52 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   // Component cho phần bên phải Navbar trên trang Collection
-const CollectionNavActions = () => (
-  <div className="flex items-center space-x-5">
-    
-    {/* 1. Icon Giỏ hàng */}
-<button className="relative text-gray-500 hover:text-primary-600 transition-colors">
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-  </svg>
-  {/* === THÔNG BÁO SỐ LƯỢNG === */}
-  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-    1
-  </span>
-</button>
+  const CollectionNavActions = () => (
+    <div className="flex items-center space-x-5">
 
-    {/* 2. Icon Cuốn sách */}
-    <Link to="/borrow-history" className="text-gray-500 hover:text-primary-600 transition-colors">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-      </svg>
-    </Link>
-
-    {/* 3. Tên User */}
-    <span className="text-sm font-medium text-gray-800 hidden sm:block">
-      Hung
-    </span>
-
-    {/* 4. Icon Tài khoản */}
-    <div className="relative">
-      <button onClick={() => isAuthenticated ? setShowUserMenu(!showUserMenu) : navigate('/login')} className="text-gray-500 hover:text-primary-600 transition-colors">
-         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+      {/* 1. Icon Giỏ hàng */}
+      <button className="relative text-gray-500 hover:text-primary-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
+        {/* === THÔNG BÁO SỐ LƯỢNG === */}
+        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+          1
+        </span>
       </button>
-      {isAuthenticated && showUserMenu && (
+
+      {/* 2. Icon Cuốn sách */}
+      <Link to="/borrow-history" className="text-gray-500 hover:text-primary-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      </Link>
+
+      {/* 3. Tên User */}
+      <span className="text-sm font-medium text-gray-800 hidden sm:block">
+        user
+      </span>
+
+      {/* 4. Icon Tài khoản */}
+      <div className="relative">
+        <button onClick={() => isAuthenticated ? setShowUserMenu(!showUserMenu) : navigate('/login')} className="text-gray-500 hover:text-primary-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+        {isAuthenticated && showUserMenu && (
           // Dropdown menu
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border">
-              <Link to="/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={closeMenus}>👤 Hồ sơ cá nhân</Link>
-              {user?.cardId && <Link to="/borrow-history" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={closeMenus}>📋 Lịch sử mượn</Link>}
-              <div className="border-t border-gray-100 my-1"></div>
-              <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">🚪 Đăng xuất</button>
+            <Link to="/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={closeMenus}>👤 Hồ sơ cá nhân</Link>
+            {user?.cardId && <Link to="/borrow-history" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={closeMenus}>📋 Lịch sử mượn</Link>}
+            <div className="border-t border-gray-100 my-1"></div>
+            <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50">🚪 Đăng xuất</button>
           </div>
-      )}
-    </div>
+        )}
+      </div>
 
-  </div>
-);
+    </div>
+  );
 
   // Component cho phần bên phải Navbar trên các trang còn lại
   const DefaultNavActions = () => (
@@ -144,7 +144,7 @@ const CollectionNavActions = () => (
           </div>
         </div>
       </div>
-      
+
       {/* Cập nhật cho Mobile Menu */}
       {isOpen && (
         <div className="md:hidden">
@@ -155,13 +155,13 @@ const CollectionNavActions = () => (
             <Link to="/collections" className={`block px-3 py-2 rounded-md text-base font-medium ${isActive("/collections") ? "bg-primary-50 border-primary-500 text-primary-700" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`} onClick={closeMenus}>📁 Bộ sưu tập</Link>
             {(isAdmin || isLibrarian) && (<Link to="/admin" className={`block px-3 py-2 rounded-md text-base font-medium ${location.pathname.startsWith("/admin") ? "bg-primary-50 border-primary-500 text-primary-700" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`} onClick={closeMenus}>⚙️ Quản trị</Link>)}
           </div>
-          
+
           <div className="pt-4 pb-3 border-t border-gray-200">
             {/* Logic tương tự cho mobile view */}
             {isCollectionPage ? (
-               <div className="flex justify-around items-center px-5">
-                 <CollectionNavActions />
-               </div>
+              <div className="flex justify-around items-center px-5">
+                <CollectionNavActions />
+              </div>
             ) : (
               // Code cũ cho mobile view
               isAuthenticated ? (
