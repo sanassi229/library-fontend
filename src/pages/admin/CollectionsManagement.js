@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import AdminLayout from '../../components/layout/AdminLayout'; // Import AdminLayout
+import AdminLayout from '../../components/layout/AdminLayout';
 
-const BooksManagement = () => {
+const CollectionsManagement = () => {
   const navigate = useNavigate(); // Initialize navigate hook
 
   const handleGoBack = () => {
@@ -12,8 +12,7 @@ const BooksManagement = () => {
   return (
     <AdminLayout>
       <div className="py-8 px-4 sm:px-6 lg:px-8">
-
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Quản lý Sách</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Quản lý Bộ sưu tập</h1>
         <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
           {/* Header với Search và Filter */}
           <div className="flex justify-between items-center mb-6">
@@ -26,7 +25,7 @@ const BooksManagement = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search Books"
+                  placeholder="Search Collections"
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
@@ -58,7 +57,7 @@ const BooksManagement = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Books</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Collections</th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interested</th>
                 </tr>
@@ -67,11 +66,11 @@ const BooksManagement = () => {
                 {/* Sample data - Replace with actual data from API */}
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <input type="radio" name="select-book" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                    <input type="radio" name="select-collection" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 cursor-pointer hover:underline"
-                    onClick={() => navigate('/admin/book/detail')}
+                    onClick={() => navigate('/admin/collection/detail')} // Thêm onClick để điều hướng
                   >
                     Bluenose
                   </td>
@@ -80,11 +79,11 @@ const BooksManagement = () => {
                 </tr>
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <input type="radio" name="select-book" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                    <input type="radio" name="select-collection" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 cursor-pointer hover:underline"
-                    onClick={() => navigate('/admin/book/detail')} 
+                    onClick={() => navigate('/admin/collection/detail')} // Thêm onClick để điều hướng
                   >
                     Pennywise
                   </td>
@@ -128,4 +127,4 @@ const BooksManagement = () => {
   );
 };
 
-export default BooksManagement;
+export default CollectionsManagement;

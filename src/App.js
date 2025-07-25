@@ -2,14 +2,29 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/layout/Layout';
-
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CardRegister from './pages/CardRegister';
 import Home from './pages/Home';
+import AdminLayout from './components/layout/AdminLayout';
 
-// <<< THAY ĐỔI 1: IMPORT COMPONENT CHI TIẾT SÁCH >>>
-import CollectionDetail from './pages/CollectionDetail';
+// Import các trang quản lý
+import AuthorsManagement from './pages/admin/AuthorsManagement';
+import BooksManagement from './pages/admin/BooksManagement';
+import CollectionsManagement from './pages/admin/CollectionsManagement';
+import TagManagement from './pages/admin/TagManagement';
+
+// Import các trang chi tiết và chỉnh sửa tác giả
+import AuthorDetail from './pages/admin/AuthorDetail';
+import AuthorEdit from './pages/admin/AuthorEdit';
+
+// Import các trang chi tiết và chỉnh sửa sách
+import BookDetail from './pages/admin/BookDetail'; // Đã thêm import này
+import BookEdit from './pages/admin/BookEdit';     // Đã thêm import này
+
+// Import các trang chi tiết và chỉnh sửa bộ sưu tập
+import CollectionDetail from './pages/admin/CollectionDetail'; // Đã sửa đường dẫn import
+import CollectionEdit from './pages/admin/CollectionEdit';     // Đã thêm import này
 
 
 // Component Browse giữ nguyên
@@ -145,7 +160,7 @@ const BookCollectionCard = ({ title, description, imageUrl }) => (
 // Các component và function còn lại giữ nguyên
 const Profile = () => ( <Layout>{/*...*/}</Layout> );
 const BorrowHistory = () => ( <Layout>{/*...*/}</Layout> );
-const Admin = () => ( <Layout>{/*...*/}</Layout> );
+const Admin = () => (<AdminLayout> {/* Sử dụng AdminLayout */}</AdminLayout>);
 
 function App() {
     return (
@@ -166,6 +181,23 @@ function App() {
                         <Route path="/borrow-history" element={<BorrowHistory />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="*" element={ <Layout>{/* Nội dung trang 404 */}</Layout> } />
+
+                        {/* Admin Routes */}
+                        <Route path="/admin" element={<Admin />} />
+                        <Route path="/admin/authors" element={<AuthorsManagement />} />
+                        <Route path="/admin/author/detail" element={<AuthorDetail />} />
+                        <Route path="/admin/author/edit" element={<AuthorEdit />} />
+                        
+                        <Route path="/admin/books" element={<BooksManagement />} />
+                        <Route path="/admin/book/detail" element={<BookDetail />} />
+                        <Route path="/admin/book/edit" element={<BookEdit />} />
+
+                        <Route path="/admin/collections" element={<CollectionsManagement />} />
+                        <Route path="/admin/collection/detail" element={<CollectionDetail />} />
+                        <Route path="/admin/collection/edit" element={<CollectionEdit />} />
+
+                        <Route path="/admin/tags" element={<TagManagement />} />
+                        
                     </Routes>
                 </div>
             </Router>
