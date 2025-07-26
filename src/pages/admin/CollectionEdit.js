@@ -1,32 +1,44 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Pencil, ChevronRight } from 'lucide-react'; // Import icons
-
-// AdminLayout tối giản được nhúng để đảm bảo mã tự chứa và biên dịch được.
-// Trong một dự án thực tế, bạn sẽ import nó từ '../../components/layout/AdminLayout'.
-const AdminLayout = ({ children }) => {
-  return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Đây là nơi bạn có thể thêm header, sidebar, v.v. của AdminLayout */}
-      <main>{children}</main>
-    </div>
-  );
-};  
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Pencil, ChevronRight } from 'lucide-react';
+import AdminLayout from '../../components/layout/AdminLayout';
 
 const CollectionEdit = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const mode = location.state?.mode || 'edit'; // 'add' hoặc 'edit'
+
+  const isAddMode = mode === 'add';
+
+  const [formData, setFormData] = useState({
+    name: isAddMode ? '' : 'Bộ Sưu Tập Mẫu',
+    id: isAddMode ? '' : 'COLLECTION001',
+    description: isAddMode
+      ? ''
+      : 'Đây là mô tả chi tiết về bộ sưu tập...',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSave = () => {
-    console.log('Saving collection data...');
-    navigate('/admin/collection/detail'); // Ví dụ: điều hướng trở lại trang chi tiết sau khi lưu
+    if (isAddMode) {
+      console.log('Gửi dữ liệu tạo mới:', formData);
+      // gọi API POST để thêm
+    } else {
+      console.log('Gửi dữ liệu cập nhật:', formData);
+      // gọi API PUT để sửa
+    }
+
+    navigate('/admin/collection/detail'); // hoặc quay lại danh sách
   };
 
   return (
     <AdminLayout>
       <div className="p-6 bg-gray-100 min-h-screen">
         <div className="bg-white rounded-lg shadow p-6">
-
-          {/* Các nút hành động: Lưu và Quay lại */}
           <div className="flex justify-between items-center mb-6">
             <button
               onClick={handleSave}
@@ -37,7 +49,7 @@ const CollectionEdit = () => {
             </button>
 
             <button
-              onClick={() => navigate('/admin/collection/detail')} // Điều hướng trở lại trang chi tiết
+              onClick={() => navigate(-1)}
               className="text-gray-600 hover:text-gray-900 flex items-center font-medium rounded-md px-3 py-1.5"
             >
               Quay lại
@@ -45,7 +57,9 @@ const CollectionEdit = () => {
             </button>
           </div>
 
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">Chỉnh sửa Bộ sưu tập</h2>
+          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+            {isAddMode ? 'Thêm Bộ sưu tập mới' : 'Chỉnh sửa Bộ sưu tập'}
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -53,7 +67,9 @@ const CollectionEdit = () => {
                 Tên bộ sưu tập:
                 <input
                   type="text"
-                  defaultValue="Bộ Sưu Tập Mẫu"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="mt-1 w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </label>
@@ -61,9 +77,13 @@ const CollectionEdit = () => {
                 ID:
                 <input
                   type="text"
-                  defaultValue="COLLECTION001"
-                  className="mt-1 w-full border border-gray-300 p-2 rounded-md bg-gray-100 cursor-not-allowed"
-                  readOnly
+                  name="id"
+                  value={formData.id}
+                  onChange={handleChange}
+                  readOnly={!isAddMode}
+                  className={`mt-1 w-full border border-gray-300 p-2 rounded-md ${
+                    isAddMode ? '' : 'bg-gray-100 cursor-not-allowed'
+                  }`}
                 />
               </label>
               <label className="block text-gray-700 font-medium">
@@ -79,7 +99,9 @@ const CollectionEdit = () => {
               <label className="block text-gray-700 font-medium">
                 Mô tả:
                 <textarea
-                  defaultValue="Đây là mô tả chi tiết về bộ sưu tập. Nó có thể bao gồm chủ đề của bộ sưu tập, các loại sách được nhóm lại, và bất kỳ thông tin đặc biệt nào khác. Bộ sưu tập này được tạo ra để nhóm các tác phẩm có liên quan, giúp người dùng dễ dàng tìm kiếm và khám phá."
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
                   className="mt-1 w-full border border-gray-300 p-2 rounded-md h-64 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
                 />
               </label>

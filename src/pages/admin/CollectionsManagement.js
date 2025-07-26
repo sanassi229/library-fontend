@@ -40,10 +40,14 @@ const CollectionsManagement = () => {
 
           {/* Action buttons */}
           <div className="mb-4 flex space-x-4">
-            <button className="flex items-center text-blue-500 hover:text-blue-700 font-medium">
+            <button
+              className="flex items-center text-blue-500 hover:text-blue-700 font-medium"
+              onClick={() => navigate('/admin/collection/edit', { state: { mode: 'add' } })}
+            >
               <img src="/ei_plus.svg" alt="Thêm" className="w-5 h-5 mr-1" />
               Thêm
             </button>
+
 
             <button className="flex items-center text-red-500 hover:text-red-700 font-medium">
               <img src="/lsicon_minus-outline.svg" alt="Xóa" className="w-5 h-5 mr-1" />
