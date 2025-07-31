@@ -1,8 +1,9 @@
+//src\pages\admin\AuthorsManagement.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import AdminLayout from '../../components/layout/AdminLayout'; // Import AdminLayout
+import AdminLayout from '../../components/layout/AdminLayout';
 
-const BooksManagement = () => {
+const AuthorsManagement = () => {
   const navigate = useNavigate(); // Initialize navigate hook
 
   const handleGoBack = () => {
@@ -12,7 +13,7 @@ const BooksManagement = () => {
   return (
     <AdminLayout>
       <div className="py-8 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Quản lý Sách</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Quản lý Tác giả</h1>
         <div className="bg-white shadow overflow-hidden sm:rounded-lg p-6">
           {/* Header với Search và Filter */}
           <div className="flex justify-between items-center mb-6">
@@ -25,7 +26,7 @@ const BooksManagement = () => {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search Books"
+                  placeholder="Search Authors"
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
@@ -40,13 +41,14 @@ const BooksManagement = () => {
 
           {/* Action buttons */}
           <div className="mb-4 flex space-x-4">
-           <button
-            className="flex items-center text-blue-500 hover:text-blue-700 font-medium"
-            onClick={() => navigate('/admin/book/edit')}
-          >
-            <img src="/ei_plus.svg" alt="Thêm" className="w-5 h-5 mr-1" />
-            Thêm
-          </button>
+            <button
+              onClick={() => navigate('/admin/author/edit?mode=create')}
+              className="flex items-center text-blue-500 hover:text-blue-700 font-medium"
+            >
+              <img src="/ei_plus.svg" alt="Thêm" className="w-5 h-5 mr-1" />
+              Thêm
+            </button>
+
 
             <button className="flex items-center text-red-500 hover:text-red-700 font-medium">
               <img src="/lsicon_minus-outline.svg" alt="Xóa" className="w-5 h-5 mr-1" />
@@ -54,43 +56,37 @@ const BooksManagement = () => {
             </button>
           </div>
 
+
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Authors</th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Books</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interested</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liked</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {/* Sample data - Replace with actual data from API */}
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <input type="radio" name="select-book" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                    <input type="radio" name="select-author" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
                   </td>
                   <td
                     className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 cursor-pointer hover:underline"
-                    onClick={() => navigate('/admin/book/detail')}
-                  >
-                    Bluenose
+                    onClick={() => navigate('/admin/author/detail')} >J.K. Rowling
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Harry potter</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40</td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <input type="radio" name="select-book" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
+                    <input type="radio" name="select-author" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
                   </td>
-                  <td
-                    className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 cursor-pointer hover:underline"
-                    onClick={() => navigate('/admin/book/detail')} 
-                  >
-                    Pennywise
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pennywise</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">200</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40 <span className="text-red-500 text-lg ml-2">❌</span></td>
                 </tr>
                 {/* ... other rows ... */}
@@ -130,4 +126,4 @@ const BooksManagement = () => {
   );
 };
 
-export default BooksManagement;
+export default AuthorsManagement;

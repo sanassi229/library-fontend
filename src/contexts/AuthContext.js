@@ -21,21 +21,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authLoading, setAuthLoading] = useState(false);
 
-  const handleApiResponse = (response, successMessage = null) => {
-    if (response.success) {
-      return {
-        success: true,
-        message: response.message || successMessage,
-        data: response.data
-      };
-    } else {
-      return {
-        success: false,
-        message: response.message || 'Có lỗi xảy ra'
-      };
-    }
-  };
-
   const handleApiError = (error) => {
     console.error('API Error:', error);
     
@@ -87,7 +72,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async () => {
     try {
-      const response = await apiMethods.get('/auth/me');
+      const response = await apiMethods.get('/api/auth/me');
       
       if (response.success && response.data) {
         setUser(response.data);
@@ -104,36 +89,37 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (email, password) => {
-    if (!email || !password) {
+  const login = async (username, password) => {
+    if (!username || !password) {
       return {
         success: false,
-        message: 'Vui lòng nhập đầy đủ email và mật khẩu'
+        message: 'Vui lòng nhập đầy đủ tài khoản và mật khẩu'
       };
     }
 
     setAuthLoading(true);
     
     try {
-      const response = await apiMethods.post('/auth/login', { 
-        email: email.trim().toLowerCase(), 
+      const response = await apiMethods.post('/api/auth/login', { 
+        username: username.trim().toLowerCase(), 
         password 
       });
       
-      const result = handleApiResponse(response, SUCCESS_MESSAGES.LOGIN_SUCCESS);
-      
-      if (result.success && result.data) {
-        const { user: userData, token } = result.data;
+      if (response.success && response.data) {
+        const { user: userData, token } = response.data;
         saveUserData(userData, token);
         
         return {
           success: true,
-          message: result.message,
+          message: response.message || SUCCESS_MESSAGES.LOGIN_SUCCESS,
           user: userData
         };
       }
       
-      return result;
+      return {
+        success: false,
+        message: response.message || 'Đăng nhập thất bại'
+      };
       
     } catch (error) {
       return handleApiError(error);
@@ -143,9 +129,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    const { name, email, password, address } = userData;
+    const { name, email, password, cardId, username } = userData;
     
-    if (!name || !email || !password || !address) {
+    if (!name || !email || !password || !cardId || !username) {
       return {
         success: false,
         message: 'Vui lòng điền đầy đủ thông tin'
@@ -155,28 +141,29 @@ export const AuthProvider = ({ children }) => {
     setAuthLoading(true);
     
     try {
-      const response = await apiMethods.post('/auth/register', { 
+      const response = await apiMethods.post('/api/auth/register', { 
         name: name.trim(),
         email: email.trim().toLowerCase(), 
         password,
-        address: address.trim()
+        cardId: cardId.trim().toUpperCase(),
+        username: username.trim().toLowerCase()
       });
       
-      const result = handleApiResponse(response, SUCCESS_MESSAGES.REGISTER_SUCCESS);
-      
-      if (result.success && result.data) {
-        const { user: newUser, token, cardId } = result.data;
+      if (response.success && response.data) {
+        const { user: newUser, token } = response.data;
         saveUserData(newUser, token);
         
         return {
           success: true,
-          message: result.message,
-          user: newUser,
-          cardId
+          message: response.message || SUCCESS_MESSAGES.REGISTER_SUCCESS,
+          user: newUser
         };
       }
       
-      return result;
+      return {
+        success: false,
+        message: response.message || 'Đăng ký tài khoản thất bại'
+      };
       
     } catch (error) {
       return handleApiError(error);
@@ -198,7 +185,7 @@ export const AuthProvider = ({ children }) => {
     setAuthLoading(true);
     
     try {
-      const response = await apiMethods.post('/auth/register-library-card', {
+      const response = await apiMethods.post('/api/auth/register-card-only', {
         name: name.trim(),
         email: email.trim().toLowerCase(), 
         phone: phone.trim(),
@@ -206,24 +193,59 @@ export const AuthProvider = ({ children }) => {
         cccd: cccd.trim()
       });
       
-      const result = handleApiResponse(response, 'Đăng ký thẻ thư viện thành công');
-      
-      if (result.success && result.data) {
-        const { user: newUser, token, cardId } = result.data;
-        
-        if (token && newUser) {
-          saveUserData(newUser, token);
-        }
+      if (response.success && response.data) {
+        const { cardId, name: cardName, email: cardEmail } = response.data;
         
         return {
           success: true,
-          message: result.message,
-          user: newUser,
-          cardId
+          message: response.message || 'Đăng ký thẻ thư viện thành công',
+          cardId,
+          name: cardName,
+          email: cardEmail
         };
       }
       
-      return result;
+      return {
+        success: false,
+        message: response.message || 'Đăng ký thẻ thất bại'
+      };
+      
+    } catch (error) {
+      return handleApiError(error);
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const linkCardToAccount = async (cardId) => {
+    if (!cardId) {
+      return {
+        success: false,
+        message: 'Vui lòng nhập mã thẻ'
+      };
+    }
+
+    setAuthLoading(true);
+    
+    try {
+      const response = await apiMethods.post('/api/auth/link-card', {
+        cardId: cardId.trim().toUpperCase()
+      });
+      
+      if (response.success) {
+        await refreshAuth();
+        
+        return {
+          success: true,
+          message: response.message || 'Liên kết thẻ thư viện thành công',
+          data: response.data
+        };
+      }
+      
+      return {
+        success: false,
+        message: response.message || 'Liên kết thẻ thất bại'
+      };
       
     } catch (error) {
       return handleApiError(error);
@@ -257,20 +279,22 @@ export const AuthProvider = ({ children }) => {
 
   const refreshAuth = async () => {
     try {
-      const response = await apiMethods.get('/auth/me');
-      const result = handleApiResponse(response);
+      const response = await apiMethods.get('/api/auth/me');
       
-      if (result.success && result.data) {
-        setUser(result.data);
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(result.data));
+      if (response.success && response.data) {
+        setUser(response.data);
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.data));
         
         return { 
           success: true, 
-          user: result.data 
+          user: response.data 
         };
       } else {
         clearAuthData();
-        return result;
+        return {
+          success: false,
+          message: 'Không thể làm mới thông tin người dùng'
+        };
       }
     } catch (error) {
       clearAuthData();
@@ -295,6 +319,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     registerCard,
+    linkCardToAccount,
     logout,
     updateUser,
     refreshAuth,

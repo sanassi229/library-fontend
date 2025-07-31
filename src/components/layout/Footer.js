@@ -14,15 +14,15 @@ const Footer = () => {
             <div className="flex flex-col items-start">
               <h5 className="font-semibold">Liên hệ</h5>
               <div className="flex flex-row items-center mt-3">
-                <img src="ic_phone.svg" alt="Phone" />
+                <img src="/ic_phone.svg" alt="Phone" />
                 <h5 className="font-semibold ml-2">19002800</h5>
               </div>
               <div className="flex flex-row items-center mt-3">
-                <img src="ic_zalo.svg" alt="Zalo" />
+                <img src="/ic_zalo.svg" alt="Zalo" />
                 <h5 className="font-semibold ml-2">19002800</h5>
               </div>
               <div className="flex flex-row items-center mt-3">
-                <img src="ic_email.svg" alt="Email" />
+                <img src="/ic_email.svg" alt="Email" />
                 <h5 className="font-semibold ml-2">demo.@gmail</h5>
               </div>
             </div>
@@ -30,7 +30,7 @@ const Footer = () => {
             <div className="flex flex-col items-start">
               <h5 className="font-semibold">Địa chỉ công ty</h5>
               <div className="flex flex-row items-start mt-3">
-                <img src="ic_location.svg" alt="Location" />
+                <img src="/ic_location.svg" alt="Location" />
                 <h5 className="font-semibold ml-2">
                   828 Sư Vạn Hạnh, Phường 12, Quận 10, Hồ Chí Minh
                 </h5>
