@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
-import './CollectionDetail.css';
+import './ItemsDetail.css';
 
 const CollectionDetail = () => {
     const { id } = useParams();
@@ -21,6 +21,8 @@ const CollectionDetail = () => {
             '/su-im-lang.jpg'
         ]
     };
+
+
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 

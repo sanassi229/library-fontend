@@ -41,15 +41,17 @@ const BookEdit = () => {
   };
 
   const handleSave = () => {
-    if (isEditMode) {
-      console.log('🔄 Updating book:', bookData);
-      // TODO: Gọi API PUT /books/:id
-    } else {
-      console.log('➕ Creating new book:', bookData);
-      // TODO: Gọi API POST /books
-    }
-    navigate('/admin/books');
-  };
+  if (isEditMode) {
+    console.log('🔄 Updating book:', bookData);
+    // TODO: Gọi API PUT /books/:id
+    navigate('/admin/book/detail');
+  } else {
+    console.log('➕ Creating new book:', bookData);
+    // TODO: Gọi API POST /books
+    navigate('/admin/book/detail'); // ← Chuyển đến trang chi tiết
+  }
+};
+
 
   return (
     <AdminLayout>

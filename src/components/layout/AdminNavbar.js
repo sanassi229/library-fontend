@@ -17,11 +17,14 @@ const AdminNavbar = () => {
       {/* Bên trái: Logo + Links */}
       <div className="flex items-center space-x-6">
         {/* Logo */}
-        <img
-          src="/ic_logo.svg"
-          alt="Admin Logo"
-          className="h-14 w-auto object-contain"
-        />
+        <Link to="/">
+          <img
+            src="/ic_logo.svg"
+            alt="Admin Logo"
+            className="h-14 w-auto object-contain cursor-pointer"
+          />
+        </Link>
+
 
         {/* Các link menu */}
         <Link

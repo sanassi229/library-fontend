@@ -187,14 +187,16 @@ const Browse = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
             {books.length > 0 ? (
               books.map((book) => (
-                <BookCardPlaceholder
-                  key={book.idbook} 
-                  title={book.titlebook} 
-                  author={book.authorbook} 
-                  imageUrl={book.imagebook} 
-                  views={0} 
-                  likes={0} 
-                />
+                <Link to={`/book/${book.idbook}`} key={book.idbook}>
+                  <BookCardPlaceholder
+                    title={book.titlebook} 
+                    author={book.authorbook} 
+                    imageUrl={book.imagebook} 
+                    views={0} 
+                    likes={0} 
+                  />
+                </Link>
+
               ))
             ) : (
               <div className="lg:col-span-4 text-center py-12 text-gray-500">
