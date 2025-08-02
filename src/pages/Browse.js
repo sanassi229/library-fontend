@@ -3,30 +3,67 @@ import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import { bookService } from '../services/bookService';
 
-const BookCardPlaceholder = ({ title, author, imageUrl, views, likes }) => {
+const BookCardPlaceholder = ({ id, title, author, imageUrl, views, likes }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform hover:scale-105 duration-200 cursor-pointer">
-      <div className="relative">
-        <img
-          src={imageUrl || "https://placehold.co/200x300/e0e0e0/ffffff?text=Book+Cover"}
-          alt={title}
-          className="w-full h-64 object-cover"
-        />
-        <div className="absolute top-2 right-2 flex space-x-2 text-white text-sm">
-          <span className="bg-black bg-opacity-50 rounded-full px-2 py-1 flex items-center">
-            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/></svg>
-            {views}
-          </span>
-          <span className="bg-black bg-opacity-50 rounded-full px-2 py-1 flex items-center">
-            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/></svg>
-            {likes}
-          </span>
+    <Link to={`/books/${id}`} className="block">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform hover:scale-105 duration-200 cursor-pointer">
+        <div className="relative">
+          <img
+            src={imageUrl || "https://placehold.co/200x300/e0e0e0/ffffff?text=Book+Cover"}
+            alt={title}
+            className="w-full h-64 object-cover"
+          />
+          <div className="absolute top-2 right-2 flex space-x-2 text-white text-sm">
+            <span className="bg-black bg-opacity-50 rounded-full px-2 py-1 flex items-center">
+              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/></svg>
+              {views}
+            </span>
+            <span className="bg-black bg-opacity-50 rounded-full px-2 py-1 flex items-center">
+              <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/></svg>
+              {likes}
+            </span>
+          </div>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-gray-800 text-lg mb-1 line-clamp-2">{title}</h3>
+          <p className="text-gray-600 text-sm">{author}</p>
         </div>
       </div>
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-800 text-lg mb-1 line-clamp-2">{title}</h3>
-        <p className="text-gray-600 text-sm">{author}</p>
+    </Link>
+  );
+};
+
+const BookList = ({ books, loading }) => {
+  if (loading) {
+    return (
+      <div className="lg:col-span-4 text-center py-12 text-gray-500">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mx-auto mb-4"></div>
+        <p className="text-lg">Đang tải sách...</p>
       </div>
+    );
+  }
+
+  if (books.length === 0) {
+    return (
+      <div className="lg:col-span-4 text-center py-12 text-gray-500">
+        <p className="text-lg">Không tìm thấy sách nào phù hợp.</p>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+      {books.map((book) => (
+        <BookCardPlaceholder
+          key={book.idbook} 
+          id={book.idbook}
+          title={book.titlebook} 
+          author={book.authorbook} 
+          imageUrl={book.imagebook} 
+          views={0} 
+          likes={0} 
+        />
+      ))}
     </div>
   );
 };
@@ -106,19 +143,6 @@ const Browse = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Đang tải sách...</p>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
   if (error) {
     return (
       <Layout>
@@ -183,26 +207,8 @@ const Browse = () => {
               Bộ lọc
             </button>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {books.length > 0 ? (
-              books.map((book) => (
-                <BookCardPlaceholder
-                  key={book.idbook} 
-                  title={book.titlebook} 
-                  author={book.authorbook} 
-                  imageUrl={book.imagebook} 
-                  views={0} 
-                  likes={0} 
-                />
-              ))
-            ) : (
-              <div className="lg:col-span-4 text-center py-12 text-gray-500">
-                <div className="text-5xl mb-4">😔</div>
-                <p className="text-lg">Không tìm thấy sách nào phù hợp.</p>
-              </div>
-            )}
-          </div>
+          
+          <BookList books={books} loading={loading} />
 
           {totalPages > 1 && (
             <div className="flex justify-center items-center space-x-2 text-gray-700 font-medium">

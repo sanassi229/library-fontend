@@ -9,108 +9,11 @@ import Register from './pages/Register';
 import CardRegister from './pages/CardRegister';
 import Browse from './pages/Browse';
 import ContactUs from './pages/ContactUs';
+import DetailBook from './pages/DetailBook'; // Import component DetailBook mới
+import PersonalBookshelf from './pages/PersonalBookshelf'; // Tạo file này trong thư mục pages
+import ShoppingCart from './pages/ShoppingCart'; // Tạo file này trong thư mục pages
+import Profile from './pages/Profile'; // Import component Profile mới
 
-
-const Collections = () => (
-  <Layout>
-    <div className="py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            📁 Bộ sưu tập
-          </h1>
-          <p className="text-gray-600 mb-8">
-            Khám phá các bộ sưu tập sách được tuyển chọn
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {[
-              { title: 'Sách hay tháng này', count: '25 cuốn', emoji: '⭐' },
-              { title: 'Văn học Việt Nam', count: '150 cuốn', emoji: '🇻🇳' },
-              { title: 'Khoa học công nghệ', count: '200 cuốn', emoji: '🔬' }
-            ].map((collection, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="text-4xl mb-4">{collection.emoji}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{collection.title}</h3>
-                <p className="text-gray-600">{collection.count}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-            <p className="text-gray-600 mb-4">
-              Collection grid sẽ được implement với CollectionCard components
-            </p>
-            <Link 
-              to="/" 
-              className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium"
-            >
-              Về trang chủ
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Layout>
-);
-
-const Profile = () => (
-  <Layout>
-    <div className="py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            👤 Hồ sơ cá nhân
-          </h1>
-          <p className="text-gray-600 mb-8">
-            Quản lý thông tin cá nhân và hoạt động thư viện
-          </p>
-          
-          <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-            <p className="text-gray-600 mb-4">
-              Profile page sẽ được implement với user info và borrow history
-            </p>
-            <Link 
-              to="/" 
-              className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium"
-            >
-              Về trang chủ
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Layout>
-);
-
-const BorrowHistory = () => (
-  <Layout>
-    <div className="py-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            📋 Lịch sử mượn sách
-          </h1>
-          <p className="text-gray-600 mb-8">
-            Theo dõi lịch sử mượn và trả sách
-          </p>
-          
-          <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-200">
-            <p className="text-gray-600 mb-4">
-              Borrow history table sẽ được implement với data từ API
-            </p>
-            <Link 
-              to="/profile" 
-              className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium"
-            >
-              Về hồ sơ
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Layout>
-);
 
 const Admin = () => (
   <Layout>
@@ -150,14 +53,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/collections" element={<Collections />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/card-register" element={<CardRegister />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/borrow-history" element={<BorrowHistory />} />
             <Route path="/admin" element={<Admin />} />
-            
+            <Route path="/books/:bookId" element={<DetailBook />} />
+            <Route path="/bookshelf" element={<PersonalBookshelf />} />
+            <Route path="/cart" element={<ShoppingCart />} />
             <Route path="*" element={
               <Layout>
                 <div className="py-16">
