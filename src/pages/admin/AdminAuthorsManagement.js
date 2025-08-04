@@ -85,7 +85,7 @@ const AuthorsManagement = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <input type="radio" name="select-author" className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300" />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pennywise</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">TestData</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">200</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">40 <span className="text-red-500 text-lg ml-2">❌</span></td>
                 </tr>

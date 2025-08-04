@@ -1,9 +1,23 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Bell, UserCircle } from 'lucide-react'; // Dùng icon từ lucide-react
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { Bell, Search, User, ChevronDown, Menu } from 'lucide-react';
 
 const AdminNavbar = () => {
+  const { user, logout, isAuthenticated, isAdmin, isLibrarian } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    navigate("/login");
+  };
+
+  const closeMenus = () => {
+    setShowUserMenu(false);
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -24,41 +38,43 @@ const AdminNavbar = () => {
             className="h-14 w-auto object-contain cursor-pointer"
           />
         </Link>
-
-
-        {/* Các link menu */}
-        <Link
-          to="/admin/authors"
-          className={`${baseClasses} ${
-            isActive("/admin/authors") ? activeClasses : inactiveClasses
-          }`}
-        >
-          Authors
-        </Link>
-        <Link
-          to="/admin/books"
-          className={`${baseClasses} ${
-            isActive("/admin/books") ? activeClasses : inactiveClasses
-          }`}
-        >
-          Books
-        </Link>
-        <Link
-          to="/admin/collections"
-          className={`${baseClasses} ${
-            isActive("/admin/collections") ? activeClasses : inactiveClasses
-          }`}
-        >
-          Collection
-        </Link>
-        <Link
-          to="/admin/tags"
-          className={`${baseClasses} ${
-            isActive("/admin/tags") ? activeClasses : inactiveClasses
-          }`}
-        >
-          Tags
-        </Link>
+        {/* Các link menu - Chỉ hiển thị cho admin hoặc thủ thư */}
+        {(isAdmin || isLibrarian) && (
+          <>
+            <Link
+              to="/admin/authors"
+              className={`${baseClasses} ${
+                isActive("/admin/authors") ? activeClasses : inactiveClasses
+              }`}
+            >
+              Authors
+            </Link>
+            <Link
+              to="/admin/books"
+              className={`${baseClasses} ${
+                isActive("/admin/books") ? activeClasses : inactiveClasses
+              }`}
+            >
+              Books
+            </Link>
+            <Link
+              to="/admin/collections"
+              className={`${baseClasses} ${
+                isActive("/admin/collections") ? activeClasses : inactiveClasses
+              }`}
+            >
+              Collection
+            </Link>
+            <Link
+              to="/admin/tags"
+              className={`${baseClasses} ${
+                isActive("/admin/tags") ? activeClasses : inactiveClasses
+              }`}
+            >
+              Tags
+            </Link>
+          </>
+        )}
       </div>
 
       {/* Bên phải: Search + User info + Bell */}
@@ -71,34 +87,51 @@ const AdminNavbar = () => {
             className="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <img
-              src="/magnify_search.svg"
-              alt="Search Icon"
-              className="w-4 h-4"
-            />
+            <Search className="w-4 h-4" />
           </span>
         </div>
 
-        {/* Thông tin người dùng */}
-        <Link
-        to="/admin/profile"
-        className="flex items-center space-x-2 hover:bg-gray-100 p-1 rounded-md transition duration-150">
-        <div className="flex items-center space-x-2">
-          <div className="p-2 bg-gray-100 rounded-full">
-            <UserCircle className="h-6 w-6 text-gray-600" />
-          </div>
-          <div className="flex flex-col leading-tight text-sm">
-            <span className="font-medium">Tên Admin</span>
-            <span className="text-xs text-gray-500">Admin</span>
-          </div>
-        </div>
-        </Link>
-        
-        {/* Nút chuông */}
-        <button className="p-2 bg-gray-100 rounded-full relative hover:bg-gray-200">
-          <Bell className="h-6 w-6 text-gray-600" />
-          <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full" />
-        </button>
+        {isAuthenticated && (isAdmin || isLibrarian) ? (
+          <>
+            {/* Nút chuông */}
+            <button className="p-2 bg-gray-100 rounded-full relative hover:bg-gray-200">
+              <Bell className="h-6 w-6 text-gray-600" />
+              <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full" />
+            </button>
+            
+            {/* Thông tin người dùng (Dropdown) */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center p-2 rounded-full text-gray-600 hover:bg-gray-100 focus:outline-none"
+              >
+                <div className="flex items-center space-x-2">
+                  <User className="h-6 w-6" />
+                  <span className="text-sm font-medium">{user?.name || "Admin"}</span>
+                  <ChevronDown className={`ml-1 h-4 w-4 transform transition-transform duration-200 ${showUserMenu ? 'rotate-180' : ''}`} />
+                </div>
+              </button>
+              {showUserMenu && (
+                <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                  <div className="py-1">
+                    <div className="px-4 py-2">
+                      <div className="text-base font-medium text-gray-800">{user?.name}</div>
+                      <div className="text-sm text-gray-500">{user?.email}</div>
+                    </div>
+                    <div className="mt-1 space-y-1">
+                      <Link to="/admin/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50" onClick={closeMenus}>Hồ sơ cá nhân</Link>
+                      <button onClick={handleLogout} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50">Đăng xuất</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <Link to="/login" className="px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700">
+            Đăng nhập
+          </Link>
+        )}
       </div>
     </nav>
   );
