@@ -1,3 +1,4 @@
+// src\pages\Collections.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
@@ -74,7 +75,8 @@ const Collections = () => (
                         </Link>
                     ))}
                 </div>
-                {/* ============================================================================== */}<div className="flex justify-center mt-16">
+                {/* ============================================================================== */}
+                <div className="flex justify-center mt-16">
                     <img src="/img_title.svg" alt="Arcadia Logo" className="h-10 w-auto opacity-60" />
                 </div>
 

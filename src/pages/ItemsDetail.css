@@ -1,64 +1,64 @@
 .book-detail-page {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
 }
 .detail-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
 }
 
 .interest-tabs {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .tab {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
 }
 
 .tab.active {
-  background-color: #dcfce7;
+    background-color: #dcfce7;
 }
 
 .tab.active span {
-  color: #166534;
-  font-weight: 500;
+    color: #166534;
+    font-weight: 500;
 }
 
 .status-dot-green {
-  width: 0.75rem; height: 0.75rem;
-  background-color: #22c55e;
-  border-radius: 9999px;
+    width: 0.75rem; height: 0.75rem;
+    background-color: #22c55e;
+    border-radius: 9999px;
 }
 .status-dot-gray {
-  width: 0.75rem; height: 0.75rem;
-  background-color: #9ca3af;
-  border-radius: 9999px;
+    width: 0.75rem; height: 0.75rem;
+    background-color: #9ca3af;
+    border-radius: 9999px;
 }
 
 .availability-stats {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .stat-item {
-  display: flex;
-  flex-direction: column; 
-  align-items: center;
-  gap: 0.25rem;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .stat-label-group {
@@ -75,26 +75,26 @@
 
 
 .stat-label {
-  font-size: 0.875rem; 
-  color: #6b7280;
+    font-size: 0.875rem; 
+    color: #6b7280;
 }
 
 .stat-value {
-  font-weight: 600;
-  font-size: 1.125rem;
-  color: #111827;
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: #111827;
 }
 .stat-value {
-  font-weight: 600;
+    font-weight: 600;
 }
 .back-button {
-  color: #4b5563;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.2s;
+    color: #4b5563;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
 }
 .back-button:hover {
-  color: #111827;
+    color: #111827;
 }
 
 .back-button-large {
@@ -102,7 +102,7 @@
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 0.375rem;
-    display: flex;        
+    display: flex;       
     align-items: center; 
     gap: 0.5rem; 
 }
@@ -115,172 +115,173 @@
 }
 
 .detail-content-card {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  padding: 2rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    padding: 2rem;
 }
 
 .detail-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: stretch;
 }
 @media (min-width: 1024px) {
-  .detail-grid {
-    grid-template-columns: minmax(320px, 1fr) 2fr;
-  }
+    .detail-grid {
+        grid-template-columns: minmax(320px, 1fr) 2fr;
+    }
 }
 
 .cover-container {
-  display: flex;
-  height: 100%;
+    display: flex;
+    height: 100%;
 }
 
 .slider-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .book-cover-image {
-  max-width: 100%;
-  height: 100%;
-  max-height: 700px;
-  object-fit: contain;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  transition: opacity 0.3s ease-in-out;
+    max-width: 100%;
+    height: 100%;
+    max-height: 700px;
+    object-fit: contain;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: opacity 0.3s ease-in-out;
 }
 .slider-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.4);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 24px;
-  line-height: 40px;
-  text-align: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  z-index: 10;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
 }
 
-.slider-wrapper:hover .slider-button {opacity: 1;
+.slider-wrapper:hover .slider-button {
+    opacity: 1;
 }
 
 .slider-button.prev {
-  left: 10px;
+    left: 10px;
 }
 
 .slider-button.next {
-  right: 10px;
+    right: 10px;
 }
 .info-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 .book-title {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #111827;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #111827;
 }
 .info-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 .info-item {
-  display: flex;
-  font-size: 1rem;
+    display: flex;
+    font-size: 1rem;
 }
 .info-label {
-  font-weight: 600;
-  color: #374151;
-  width: 128px;
-  flex-shrink: 0;
+    font-weight: 600;
+    color: #374151;
+    width: 128px;
+    flex-shrink: 0;
 }
 .info-value {
-  color: #4b5563;
+    color: #4b5563;
 }
 .info-value.author {
-  color: #7c3aed;
-  font-weight: 500;
+    color: #7c3aed;
+    font-weight: 500;
 }
 .description-section {
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
 }
 .description-title {
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
 }
 .description-text {
-  color: #4b5563;
-  line-height: 1.625;
+    color: #4b5563;
+    line-height: 1.625;
 }
 
 .action-buttons-group {
-  display: flex;
-  gap: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
-  margin-top: auto;
-  justify-content: center;
+    display: flex;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    margin-top: auto;
+    justify-content: center;
 }
 .action-button {
-  padding: 8px 10px;  
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 20px;    
-  border: 2px solid;
+    padding: 8px 10px;  
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 20px;    
+    border: 2px solid;
 }
 .borrow-button {
-  background-color: transparent;
-  border: 2px solid #7c3aed; 
-  color: #7c3aed;
+    background-color: transparent;
+    border: 2px solid #7c3aed;  
+    color: #7c3aed;
 }
 .add-button {
-  background-color: transparent; 
-  border: 2px solid #16a34a;  
-  color: #16a34a;            
+    background-color: transparent;  
+    border: 2px solid #16a34a;    
+    color: #16a34a;             
 }
 
 .add-button:hover {
-  background-color: #16a34a;   
-  color: white;               
+    background-color: #16a34a;   
+    color: white;                
 }
 
 .borrow-button:hover .button-icon {
-  filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
 }
 .add-button:hover .button-icon {
-  filter: brightness(0) invert(1);
+    filter: brightness(0) invert(1);
 }
 
 .tab-icon {
-  width: 20px;  
-  height: 20px;
+    width: 20px;  
+    height: 20px;
 }
 .stat-divider {
-  width: 1px;
-  background-color: #e5e7eb; 
+    width: 1px;
+    background-color: #e5e7eb;  
 
-  min-height: 40px; 
+    min-height: 40px;  
 }

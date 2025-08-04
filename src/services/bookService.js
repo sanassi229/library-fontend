@@ -90,5 +90,29 @@ export const bookService = {
       console.error('Error deleting book:', error);
       throw error;
     }
+  },
+
+   checkBooksAvailability: async (bookIds) => {
+    try {
+      const response = await api.post('/api/books/check-availability', {
+        bookIds: bookIds
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Check books availability error:', error);
+      throw error.response?.data || { success: false, message: 'Lỗi khi kiểm tra tình trạng sách' };
+    }
+  },
+
+  getBulkBooks: async (bookIds) => {
+    try {
+      const idsString = bookIds.join(',');
+      const response = await api.get(`/api/books/bulk?ids=${idsString}`);
+      return response.data;
+    } catch (error) {
+      console.error('Get bulk books error:', error);
+      throw error.response?.data || { success: false, message: 'Lỗi khi lấy thông tin nhiều sách' };
+    }
   }
 };
+

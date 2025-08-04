@@ -1,3 +1,4 @@
+// src\pages\CollectionsDetail.js
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';

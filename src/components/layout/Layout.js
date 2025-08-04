@@ -11,7 +11,7 @@ const Layout = ({ children, showFooter = true }) => {
       <main className="flex-grow w-full">
         {children}
       </main>
-            {showFooter && (
+      {showFooter && (
         <footer className="flex-shrink-0 w-full">
           <Footer />
         </footer>
